@@ -19,8 +19,8 @@
 <template>
     <div :style="{
         display: props.verticalNavMenu ? 'grid' : 'flex',
-        gridTemplateColumns: 'repeat(6, 1fr)',
-        gridTemplateRows: 'repeat(6, 1fr)',
+        gridTemplateColumns: 'repeat(8, 1fr)',
+        gridTemplateRows: 'repeat(8, 1fr)',
         justifyContent: props.verticalNavMenu ? 'stretch' : 'flex-start',
         height: '100vh',
         overflow: 'hidden',
@@ -38,8 +38,8 @@
         <div class="content"
             :style="{
                 padding: props.verticalNavMenu ? '3rem' : '5rem 3rem',
-                gridColumn: props.verticalNavMenu ? '2 / 6' : '1 / 6',
-                gridRow: props.verticalNavMenu ? '1 / 6' : '2 / 6',
+                gridColumn: props.verticalNavMenu ? '2 / 8' : '1 / 8',
+                gridRow: props.verticalNavMenu ? '1 / 8' : '2 / 8',
                 overflow: 'auto',
                 width: '100%',
             }"
