@@ -11,13 +11,6 @@
     transition: 0.5s;
     padding-top: 60px;
     padding-left: 2rem;
-}
-.aside-navbar{
-    display:flex;
-    flex-direction: column;
-    text-align: right;
-    transition: 0.5s;
-    padding-right: 2rem;
     gap: 1rem;
 }
 .navbar{
@@ -33,10 +26,8 @@
     left: 0;
     padding: 0px 30px;
     align-items: center;
-    overflow-x: hidden;
     transition: 0.5s;
 }
-
 .card{
     display:flex;
     flex-direction: column;
@@ -67,3 +58,4 @@
     gap: 1rem;
     transition: 0.5s;
 }
+

@@ -14,7 +14,17 @@ const routes = [
     {
         path: "/contacts",
         name: "Contacts",
-        component: () => import("@/Pages/ContactsPage.vue")
+        component: () => import("@/Pages/Contacts/ContactsPage.vue")
+    },
+    {
+        path: "/contacts/add",
+        name: "AddContact",
+        component: () => import("@/Pages/Contacts/AddContactPage.vue")
+    },
+    {
+        path: "/contacts/list",
+        name: "ListContacts",
+        component: () => import("@/Pages/Contacts/ListContactsPage.vue")
     },
 ];
 

@@ -1,7 +1,8 @@
 <script setup>
-    import { defineProps } from 'vue';
+    import { defineProps, ref, computed, onMounted, onBeforeUnmount } from 'vue';
     import AsideNavbar from '@/components/Side/AsideNavbar.vue';
     import NavbarComponent from '@/components/Navs/NavbarComponent.vue';
+    import HamburguerNav from '@/components/Navs/HamburguerNav.vue';
     import '@/assets/css/main.css';
 
     const props = defineProps({
@@ -15,35 +16,70 @@
             required: true,
         },
     });
+
+    const screenWidth = ref(window.innerWidth);
+
+    const isLargeScreen = computed(() => screenWidth.value >= 1024);
+
+    const handleResize = () => {
+        const width = window.innerWidth;
+        if (width !== screenWidth.value) {
+            screenWidth.value = width;
+        }
+        console.log(screenWidth.value);
+    };
+
+    onMounted(() => {
+        window.addEventListener('resize', () => {
+            handleResize();
+        });
+    });
+
+    onBeforeUnmount(() => {
+        document.removeEventListener('resize', () => {
+            handleResize();
+        });
+    });
 </script>
 <template>
     <div :style="{
-        display: props.verticalNavMenu ? 'grid' : 'flex',
+        display: verticalNavMenu ? 'grid' : 'flex',
         gridTemplateColumns: 'repeat(8, 1fr)',
-        gridTemplateRows: 'repeat(8, 1fr)',
+        gridTemplateRows: 'repeat(9, 1fr)',
         justifyContent: props.verticalNavMenu ? 'stretch' : 'flex-start',
         height: '100vh',
         overflow: 'hidden',
     }">
-        <!-- if verticalNavMenu show sidebar and router view -->
-        <aside class="sidebar" v-if="props.verticalNavMenu">
-            <AsideNavbar :menu="props.menu"></AsideNavbar>
-        </aside>
-        <nav class="navbar" v-if="!props.verticalNavMenu">
-            <NavbarComponent :menu="props.menu"></NavbarComponent>
-        </nav>
-        <!-- content must be adaptative to vertical sidebar or navbar -->
-        <!-- if vertical, take the next columns and fill all the space -->
-        <!-- if horizontal, take the next rows and fill all the space -->
+        <AsideNavbar
+            v-if="props.verticalNavMenu && isLargeScreen"
+            :menu="props.menu">
+        </AsideNavbar>
+        <NavbarComponent 
+            v-if="!props.verticalNavMenu && isLargeScreen"
+            :menu="props.menu">
+        </NavbarComponent>
+        <HamburguerNav 
+            v-if="!isLargeScreen" 
+            :menu="props.menu">
+        </HamburguerNav>
         <div class="content"
             :style="{
-                padding: props.verticalNavMenu ? '3rem' : '5rem 3rem',
-                gridColumn: props.verticalNavMenu ? '2 / 8' : '1 / 8',
-                gridRow: props.verticalNavMenu ? '1 / 8' : '2 / 8',
+                /* adjust position if screen is large or not and if  verticalNavMenu is active or not*/
+                gridColumn: props.verticalNavMenu && isLargeScreen ? '2 / 9' : '1 / 9',
+                gridRow: !props.verticalNavMenu && isLargeScreen ? '2 / 9' : '1 / 9',
                 overflow: 'auto',
+                padding: '1rem',
                 width: '100%',
-            }"
-            >
+                position:{
+                    verticalNavMenu: isLargeScreen ? 'relative' : 'absolute',
+                    horizontalNavMenu: 'relative',
+                }[props.verticalNavMenu ? 'verticalNavMenu' : 'horizontalNavMenu'],
+                top: {
+                    verticalNavMenu: '0',
+                    horizontalNavMenu: '4rem',
+                }[props.verticalNavMenu ? 'verticalNavMenu' : 'horizontalNavMenu'],
+                zIndex: 1,
+            }">
             <slot name="content"></slot>
         </div>
     </div>
