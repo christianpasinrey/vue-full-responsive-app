@@ -9,13 +9,22 @@
     });
 </script>
 <template>
-    <nav class="navbar">
-        <NavbarItem 
-            v-for="item in props.menu" 
-            :key="item" 
-            :item="item">
-        </NavbarItem>
-    </nav>
+    <header class="sticky-header__header">
+        <nav>
+            <NavbarItem 
+                v-for="item in props.menu" 
+                :key="item" 
+                :item="item">
+            </NavbarItem>
+        </nav>
+    </header>
 </template>
 <style scoped>
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        height: 7vh;
+        padding-left: 3rem;
+    }
 </style>

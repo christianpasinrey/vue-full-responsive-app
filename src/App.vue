@@ -4,6 +4,7 @@
 </script>
 <template>
   <MainLayout
+    :vertical-nav-menu="true"
     :menu="menu"
   >
     <template #content>

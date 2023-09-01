@@ -16,20 +16,26 @@
     const showingSubmenu = computed(() => {
         return showSubmenu.value;
     });
+
+    const handleSubmenu = (e) => {
+        e.preventDefault();
+        toggleSubmenu();
+    };
 </script>
 <template>
-    <router-link v-if="!item.submenu" :to="item.path">
+    <RouterLink v-if="!item.submenu" :to="item.path">
         <span>{{ item.label }}</span>
-    </router-link>
+    </RouterLink>
 
     <span v-else
         class="link-to-submenu"
-        @mouseenter="toggleSubmenu"
+        @mouseenter="handleSubmenu($event)"
+        @mouseleave="handleSubmenu($event)"
     >
         {{ item.label }}
         <ul 
             v-if="showingSubmenu" 
-            @mouseleave="toggleSubmenu">
+            >
             <li 
                 v-for="subitem,index in item.submenu" 
                 :key="subitem"
@@ -39,26 +45,30 @@
                     paddingTop: index === 0 ? '0.5rem' : '0rem'
                 }"
                 >
-                <router-link :to="subitem.path">
-                    <span>{{ subitem.label }}</span>
-                </router-link>
+                <RouterLink :to="subitem.path">
+                    <span style="width:100%;" @click.prevent="toggleSubmenu">{{ subitem.label }}</span>
+                </RouterLink>
             </li>
         </ul>
     </span>
         
 </template>
 <style scoped>
-/* style submenu */
+span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
 ul {
     list-style: none;
     padding-left: 0;
     position: absolute;
     top: 0;
-    left: 0;
+    left: 2rem;
     z-index: 2;
     background-color: #fefefe;
     border-radius: 5px;
     width: 100%;
+    margin-right: 2rem;
 }
 ul li {
     padding-left: 0.5rem;
@@ -66,5 +76,13 @@ ul li {
 .link-to-submenu{
     position: relative;
     z-index:2;
+}
+a {
+    text-decoration: none;
+    color: #000;
+}
+a:hover {
+    color: #102957;
+    border-bottom: 1px solid #102957;
 }
 </style>

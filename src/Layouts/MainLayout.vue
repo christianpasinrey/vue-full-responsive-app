@@ -20,6 +20,8 @@
     const screenWidth = ref(window.innerWidth);
 
     const isLargeScreen = computed(() => screenWidth.value >= 1024);
+    const isTabletScreen = computed(() => screenWidth.value >= 768 && screenWidth.value < 1024);
+    const isMobileScreen = computed(() => screenWidth.value < 768);
 
     const handleResize = () => {
         const width = window.innerWidth;
@@ -42,47 +44,40 @@
     });
 </script>
 <template>
-    <div :style="{
-        display: verticalNavMenu ? 'grid' : 'flex',
-        gridTemplateColumns: 'repeat(8, 1fr)',
-        gridTemplateRows: 'repeat(9, 1fr)',
-        justifyContent: props.verticalNavMenu ? 'stretch' : 'flex-start',
-        height: '100vh',
-        overflow: 'hidden',
-    }">
+    <div 
+        id="main-layout"
+        :class="{
+            'sidebar': props.verticalNavMenu && isLargeScreen,
+            'navbar': (!props.verticalNavMenu && isLargeScreen) || (isTabletScreen && props.verticalNavMenu),
+            'navbar--mobile': !isMobileScreen,
+        }">
         <AsideNavbar
-            v-if="props.verticalNavMenu && isLargeScreen"
+            v-if="props.verticalNavMenu && (isLargeScreen || isTabletScreen)"
             :menu="props.menu">
         </AsideNavbar>
         <NavbarComponent 
-            v-if="!props.verticalNavMenu && isLargeScreen"
+            v-if="!props.verticalNavMenu && (isLargeScreen || isTabletScreen)"
             :menu="props.menu">
         </NavbarComponent>
         <HamburguerNav 
-            v-if="!isLargeScreen" 
+            v-if="isMobileScreen" 
             :menu="props.menu">
         </HamburguerNav>
-        <div class="content"
-            :style="{
-                /* adjust position if screen is large or not and if  verticalNavMenu is active or not*/
-                gridColumn: props.verticalNavMenu && isLargeScreen ? '2 / 9' : '1 / 9',
-                gridRow: !props.verticalNavMenu && isLargeScreen ? '2 / 9' : '1 / 9',
-                overflow: 'auto',
-                padding: '1rem',
-                width: '100%',
-                position:{
-                    verticalNavMenu: isLargeScreen ? 'relative' : 'absolute',
-                    horizontalNavMenu: 'relative',
-                }[props.verticalNavMenu ? 'verticalNavMenu' : 'horizontalNavMenu'],
-                top: {
-                    verticalNavMenu: '0',
-                    horizontalNavMenu: '4rem',
-                }[props.verticalNavMenu ? 'verticalNavMenu' : 'horizontalNavMenu'],
-                zIndex: 1,
-            }">
+        <div 
+            :class="{
+                'sidebar__main': props.verticalNavMenu && isLargeScreen,
+                'navbar__main': !props.verticalNavMenu && isLargeScreen || !isLargeScreen,
+                'tablet__main': !props.verticalNavMenu && isTabletScreen,
+                'mobile__main': isMobileScreen,
+            }"
+        >
             <slot name="content"></slot>
         </div>
     </div>
 </template>
 <style scoped>
+#main-layout{
+    height: 100vh;
+    width: 100vw;
+}
 </style>

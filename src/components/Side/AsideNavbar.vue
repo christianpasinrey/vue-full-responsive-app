@@ -13,7 +13,7 @@
     });
 </script>
 <template>
-    <nav class="sidebar">
+    <nav class="sidebar__sidebar">
         <SidebarItem 
             v-for="item in props.menu" 
             :key="item" 
